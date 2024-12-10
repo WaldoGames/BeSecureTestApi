@@ -1,0 +1,6 @@
+@BeSecureTestApi_HostAddress = http://localhost:5115
+
+GET {{BeSecureTestApi_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
