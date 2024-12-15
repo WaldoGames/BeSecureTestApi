@@ -23,12 +23,9 @@ namespace BeSecureTestApi.Controllers
 
 
             var t = await us.GetUsers();
-            var jsonArray = JsonSerializer.Deserialize<List<object>>(t.ToString()); // Replace `object` with a specific type if known
-
-
-
+            var jsonArray = JsonSerializer.Deserialize<List<UsersDto>>(t.ToString()); // Replace `object` with a specific type if known
             // 
-            return Ok(jsonArray);
+            return Ok(jsonArray.Where(u=>u.pk != 3 && u.pk != 4));
         }
 
         [HttpPost]
@@ -36,6 +33,21 @@ namespace BeSecureTestApi.Controllers
         {
             await us.CreateUserAsync(newUser);
             await us.CreatePassword(newUser.password, newUser.username);
+            return Ok();
+        }
+
+        [HttpPut("/active")]
+        public async Task<IActionResult> ChanceActive(UserActiveDto User)
+        {
+            UsersDto? user= await us.getUserByName(User.username);
+
+            if (user==null)
+            {
+                return NotFound();
+            }
+
+            us.ChangeUserActiveStatus(User);
+
             return Ok();
         }
     }

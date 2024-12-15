@@ -14,7 +14,7 @@ namespace BeSecureTestApi.Services
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:9000/api/v3/core/users/");
             request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Authorization", "Bearer tOfsWazm88aVjeEAQMUwzTh6xzfnnGjWM0zUND6sXt0qsyTwQ1vTwYsorTRu");
+            request.Headers.Add("Authorization", "Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
 
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
@@ -53,7 +53,7 @@ namespace BeSecureTestApi.Services
 
                 // Add authorization header
                 client.DefaultRequestHeaders.Clear(); // Clear any existing headers
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer tOfsWazm88aVjeEAQMUwzTh6xzfnnGjWM0zUND6sXt0qsyTwQ1vTwYsorTRu");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
 
                 // Send the POST request
                 HttpResponseMessage response = await client.PostAsync(url, content);
@@ -88,7 +88,7 @@ namespace BeSecureTestApi.Services
 
                 // Add authorization header
                 client.DefaultRequestHeaders.Clear(); // Clear any existing headers
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer tOfsWazm88aVjeEAQMUwzTh6xzfnnGjWM0zUND6sXt0qsyTwQ1vTwYsorTRu");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
 
                 // Send the POST request
                 HttpResponseMessage response = await client.PostAsync("http://localhost:9000/api/v3/core/users/"+user.pk+ "/set_password/", content);
@@ -107,14 +107,14 @@ namespace BeSecureTestApi.Services
             }
         }
 
-        public async Task<bool> ChangeUserActiveStatus(UserActiveDto userdto)
+        public async Task<string> ChangeUserActiveStatus(UserActiveDto userdto)
         {
             try
             {
                 UsersDto user = await getUserByName(userdto.username);
                 if (user==null)
                 {
-                    return false;
+                    return null;
                 }
                 // Serialize the DTO to JSON
                 var jsonContent = JsonSerializer.Serialize(new { is_active = userdto.is_active });
@@ -122,9 +122,9 @@ namespace BeSecureTestApi.Services
 
                 // Add authorization header
                 client.DefaultRequestHeaders.Clear(); // Clear any existing headers
-                client.DefaultRequestHeaders.Add("Authorization", $"Bearer tOfsWazm88aVjeEAQMUwzTh6xzfnnGjWM0zUND6sXt0qsyTwQ1vTwYsorTRu");
+                client.DefaultRequestHeaders.Add("Authorization", $"Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
 
-                // Send the POST request
+                // Send the PATCH request
                 HttpResponseMessage response = await client.PatchAsync("http://localhost:9000/api/v3/core/users/" + user.pk + "/", content);
 
                 // Ensure the request was successful

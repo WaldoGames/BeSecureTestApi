@@ -9,7 +9,7 @@ namespace BeSecureTestApi.Services
             var client = new HttpClient();
             var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:9000/api/v3/core/groups/");
             request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Authorization", "Bearer tOfsWazm88aVjeEAQMUwzTh6xzfnnGjWM0zUND6sXt0qsyTwQ1vTwYsorTRu");
+            request.Headers.Add("Authorization", "Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
             var response = await client.SendAsync(request);
             response.EnsureSuccessStatusCode();
 
