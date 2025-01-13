@@ -1,6 +1,6 @@
 ﻿namespace BeSecureTestApi.Dto
 {
-    public class UsersDto
+    public class UsersDto : AccessTokenDto
     {
         public int pk { get; set; }
         public string username { get; set; }

@@ -8,14 +8,15 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowAll",
-        builder => builder.AllowAnyOrigin()
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://10.10.10.4")
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
 
 var app = builder.Build();
-app.UseCors("AllowAll");
+
+app.UseCors("AllowSpecificOrigin");
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {

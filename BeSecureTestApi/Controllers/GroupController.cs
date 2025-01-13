@@ -1,6 +1,7 @@
 using BeSecureTestApi.Dto;
 using BeSecureTestApi.Services;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using System.Text.Json;
 
 namespace BeSecureTestApi.Controllers
@@ -19,12 +20,16 @@ namespace BeSecureTestApi.Controllers
         }
 
         [HttpGet()]
-        public async Task<IActionResult> Get()
+        public async Task<IActionResult> Get(string accesstoken)
         {
 
 
-            var t = await gs.GetGroups();
-            var jsonArray = JsonSerializer.Deserialize<List<GroupsDto>>(t.ToString()); // Replace `object` with a specific type if known
+            (object, HttpStatusCode) t = await gs.GetGroups(accesstoken);
+            if (t.Item2 == HttpStatusCode.Forbidden || t.Item2==HttpStatusCode.Unauthorized)
+            {
+                return Unauthorized();
+            }
+            var jsonArray = JsonSerializer.Deserialize<List<GroupsDto>>(t.Item1.ToString()); // Replace `object` with a specific type if known
 
 
             return Ok(jsonArray);

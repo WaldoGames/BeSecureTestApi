@@ -1,16 +1,22 @@
 ﻿using System.Text.Json;
+using System.Net;
 
 namespace BeSecureTestApi.Services
 {
     public class GroupService
     {
-        public async Task<object> GetGroups()
+        public async Task<(object, HttpStatusCode)> GetGroups(string accesstoken)
         {
             var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Get, "http://localhost:9000/api/v3/core/groups/");
+            var request = new HttpRequestMessage(HttpMethod.Get, "http://BS-Authentik:9000/api/v3/core/groups/");
             request.Headers.Add("Accept", "application/json");
-            request.Headers.Add("Authorization", "Bearer p1dyjpMLQIcOCEBh4tlKOWo9chsKdBsFW72eWbQ99fayIHC5um1N8rqmUePS");
+            request.Headers.Add("Authorization", "Bearer "+accesstoken);
             var response = await client.SendAsync(request);
+
+            if (response.StatusCode == System.Net.HttpStatusCode.Unauthorized || response.StatusCode == System.Net.HttpStatusCode.Forbidden)
+            {
+                return (null, response.StatusCode);
+            };
             response.EnsureSuccessStatusCode();
 
             string jsonString = await response.Content.ReadAsStringAsync();
@@ -18,9 +24,9 @@ namespace BeSecureTestApi.Services
             if (parsedResult != null && parsedResult.ContainsKey("results"))
             {
                 //var pr= parsedResult["results"].ToString(); // Return only the value for the specified key.
-                return parsedResult["results"];
+                return (parsedResult["results"],response.StatusCode);
             }
-            return null; // Or handle cases where the key doesn't exist.
+            return (null, HttpStatusCode.InternalServerError); // Or handle cases where the key doesn't exist.
         }
     }
 }
